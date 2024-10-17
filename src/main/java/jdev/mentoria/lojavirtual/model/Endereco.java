@@ -6,6 +6,8 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import jdev.mentoria.lojavirtual.enums.TipoEndereco;
 
 @Entity
 @Table(name = "endereco")
@@ -35,11 +39,29 @@ public class Endereco implements Serializable {
 	private String cidade;
 
 
-	@ManyToOne(targetEntity = Pessoa.class)
+	@ManyToOne(targetEntity = Pessoa.class)  //indica que o relacionamento entre as entidades Endereço e Pessoa é do tipo "muitos para um". Isso significa que muitos endereços podem estar associados a uma única pessoa.
 	@JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
+	//a anotação @JoinColumn(name = "pessoa_id") está configurando uma chave estrangeira (foreign key) na tabela endereco que vai referenciar o ID da tabela pessoa.
+	//pessoa_id é o nome da coluna na tabela endereco. Essa coluna será usada para armazenar o ID da pessoa que está associada ao endereço.
 
+	//foreignKey = @ForeignKey(...): Define explicitamente a chave estrangeira para essa coluna. No caso:
 
+//value = ConstraintMode.CONSTRAINT: Indica que o JPA deve criar a restrição de chave estrangeira no banco de dados.
+//name = "pessoa_fk": Especifica o nome da restrição de chave estrangeira (neste caso, "pessoa_fk"), que vai garantir que o valor da coluna pessoa_id esteja presente na tabela Pessoa.
+
+	@Enumerated(EnumType.STRING) //mapeia o Enum TipoEndereco para ser armazenado no banco de dados na classe Endereço
+	private TipoEndereco tipoEndereco;
+	
+	public void setTipoEndereco(TipoEndereco tipoEndereco) {
+		this.tipoEndereco = tipoEndereco;
+	}
+	
+	public TipoEndereco getTipoEndereco() {
+		return tipoEndereco;
+	}
+
+	
 	public Long getId() {
 		return id;
 	}

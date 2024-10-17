@@ -12,7 +12,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "pessoa_fisica")
-@PrimaryKeyJoinColumn(name = "id") //aponta para o id da classe Pessoa
+@PrimaryKeyJoinColumn(name = "id") //aponta para o id da classe Pessoa >>  indica que a chave primária de PessoaFisica será a mesma chave primária herdada da entidade Pessoa. Neste caso, o campo id na tabela pessoa_fisica vai se referir ao campo id da tabela pessoa.
 public class PessoaFisica extends Pessoa {
 
 	private static final long serialVersionUID = 1L;
