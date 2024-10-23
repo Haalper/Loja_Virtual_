@@ -20,6 +20,7 @@ import javax.persistence.Table;
 @Table(name = "nota_item_produto")
 @SequenceGenerator(name = "seq_nota_item_produto", sequenceName = "seq_nota_item_produto", allocationSize = 1, initialValue = 1)
 public class NotaItemProduto implements Serializable {
+	//A classe NotaItemProduto não representa diretamente os produtos do catálogo, mas sim os itens individuais de uma nota fiscal de compra que se referem aos produtos.
 
 
 	private static final long serialVersionUID = 1L;
@@ -37,11 +38,13 @@ public class NotaItemProduto implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "nota_fiscal_compra_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_fiscal_compra_fk"))
 	private NotaFiscalCompra notaFiscalCompra;
+	//muitos itens de nota / produtos comprados (NotaItemProduto) podem estar relacionados a uma única nota fiscal de compra (NotaFiscalCompra).
 
 
 	@ManyToOne
 	@JoinColumn(name = "produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "produto_fk"))
 	private Produto produto;
+	//muitos itens de nota (NotaItemProduto) - referentes a diferentes compras e transações -  podem estar relacionados a um único produto (Produto).
 
 
 	public Long getId() {
