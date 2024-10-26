@@ -30,12 +30,24 @@ public class Endereco implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_endereco")
 	private Long id;
 	
+	@Column(nullable = false)
 	private String ruaLogra;
+	
+	@Column(nullable = false)
 	private String cep;
+	
+	@Column(nullable = false)
 	private String numero;
+	
 	private String complemento;
+	
+	@Column(nullable = false)
 	private String bairro;
+	
+	@Column(nullable = false)
 	private String uf;
+	
+	@Column(nullable = false)
 	private String cidade;
 
 
@@ -50,6 +62,7 @@ public class Endereco implements Serializable {
 //value = ConstraintMode.CONSTRAINT: Indica que o JPA deve criar a restrição de chave estrangeira no banco de dados.
 //name = "pessoa_fk": Especifica o nome da restrição de chave estrangeira (neste caso, "pessoa_fk"), que vai garantir que o valor da coluna pessoa_id esteja presente na tabela Pessoa.
 
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING) //mapeia o Enum TipoEndereco para ser armazenado no banco de dados na classe Endereço
 	private TipoEndereco tipoEndereco;
 	

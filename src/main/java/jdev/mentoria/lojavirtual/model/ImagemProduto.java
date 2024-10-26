@@ -29,11 +29,11 @@ public class ImagemProduto implements Serializable {
 	private Long id;
 
 
-	@Column(columnDefinition = "text")
+	@Column(columnDefinition = "text", nullable = false)
 	private String imagemOriginal;
 
 
-	@Column(columnDefinition = "text")
+	@Column(columnDefinition = "text", nullable = false)
 	private String imagemMiniatura;
 	//Nos campos imagemOriginal e imagemMiniatura, o text provavelmente está sendo usado para armazenar representações em texto (como URLs ou base64) das imagens do produto.
 	//Como imagens podem gerar grandes quantidades de dados (quando convertidas para texto), o tipo text é mais adequado para armazená-las sem limites restritos de tamanho.
