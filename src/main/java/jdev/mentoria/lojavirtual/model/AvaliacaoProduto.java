@@ -15,18 +15,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "avaliacao_produto")
+@Entity    //@Entity indica que essa classe será persistida como uma tabela no banco de dados
+@Table(name = "avaliacao_produto")      //nome da nossa tabela no banco de dados
 @SequenceGenerator(name = "seq_avaliacao_produto", sequenceName = "seq_avaliacao_produto", allocationSize = 1, initialValue = 1)
 public class AvaliacaoProduto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_avaliacao_produto")
+	@Id  //indica que este campo será a nossa PK
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_avaliacao_produto") //Usa uma sequência definida no banco para gerar o valor.
 	private Long id;
 	
-	@Column(nullable = false)
+	@Column(nullable = false)    //indica que os dados do campo "nota" não poderão ser nulos.
 	private Integer nota;
 	
 	@Column(nullable = false)
