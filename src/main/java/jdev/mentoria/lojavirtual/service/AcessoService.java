@@ -13,7 +13,7 @@ public class AcessoService {
 	private AcessoRepository acessoRepository;  //injeção de dependencia
 	
 	public Acesso save(Acesso acesso) {
-		return acessoRepository.save(acesso);
+		return acessoRepository.save(acesso); //chamando diretamente o método save que já está implementado dentro do JpaRepository. Esse método é uma das funcionalidades prontas que o Spring Data JPA fornece.
 		
 	}
 }
