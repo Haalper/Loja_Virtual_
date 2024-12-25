@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -28,6 +29,7 @@ import jdev.mentoria.lojavirtual.service.AcessoService;
 import junit.framework.TestCase;
 
 
+@Profile("test")
 @SpringBootTest(classes = LojaVirtual2Application.class)
 public class LojaVirtual2ApplicationTests extends TestCase { //TestCase, que é uma classe base fornecida pelo JUnit (ou bibliotecas relacionadas). Isso não é obrigatório no JUnit moderno, mas pode ser usado para compatibilidade ou organização.
 
