@@ -51,6 +51,7 @@ public class AcessoController {
 
 	}
 	
+	//@Secured({ "ROLE_GERENTE", "ROLE_ADMIN" })    //só pode usar o método se o usuário tiver nível de gerente ou admin
 	@ResponseBody
 	@DeleteMapping(value = "**/deleteAcessoPorId/{id}")
 	public ResponseEntity<?> deleteAcessoPorId(@PathVariable("id") Long id) { 
