@@ -32,6 +32,7 @@ public class JwtApiAutenticacaoFilter extends GenericFilterBean {
 //		Request: Representa a requisição HTTP, incluindo o token JWT no cabeçalho.
 //		Response: Um objeto vazio que será preenchido ao longo do processamento.
 		
+		try {
 		
 		Authentication authentication = new JWTTokenAutenticacaoService().
 				getAuthetication((HttpServletRequest) request, (HttpServletResponse) response);
@@ -51,6 +52,11 @@ public class JwtApiAutenticacaoFilter extends GenericFilterBean {
 		chain.doFilter(request, response);
 		//chain.doFilter: Passa a requisição e a resposta para o próximo filtro na cadeia, permitindo que outros filtros ou componentes processem a requisição.
 		
+		}catch (Exception e) {
+			e.printStackTrace();
+			response.getWriter().write("Ocorreu um erro no sistema, avise o administrador: \n" + e.getMessage());
+		} //em caso de exceção onde não podemos tratar, enviamos essa mensagem ao usuário ao invés de um log gigante de erros.
+
 	}
 	
 	

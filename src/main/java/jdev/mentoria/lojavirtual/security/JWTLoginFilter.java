@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -76,6 +77,22 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
          e.printStackTrace();
      }
  }
+ 
+ @Override
+protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException failed) throws IOException, ServletException {
+	 
+	 if (failed instanceof BadCredentialsException) { //se a classe de falha (AuthenticationException) é uma instancia da classe de erro de login (BadCredentialsException)
+			response.getWriter().write("User e senha não encontrado");
+		}else { //senão (ou seja, se for outro tipo de erro) - enviaremos outro tipo de mensagem ao cliente
+			response.getWriter().write("Falha ao logar: " + failed.getMessage());
+		}
+
+	 
+	 
+	//super.unsuccessfulAuthentication(request, response, failed);
+}
+ 
 }
 
 

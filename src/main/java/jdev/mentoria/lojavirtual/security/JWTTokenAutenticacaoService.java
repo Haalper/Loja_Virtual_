@@ -1,5 +1,6 @@
 package jdev.mentoria.lojavirtual.security;
 
+import java.io.IOException;
 import java.util.Date;
 
 
@@ -13,11 +14,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import jdev.mentoria.lojavirtual.ApplicationContextLoad;
 import jdev.mentoria.lojavirtual.model.Usuario;
 import jdev.mentoria.lojavirtual.repository.UsuarioRepository;
+
 
 
 
@@ -28,7 +32,7 @@ public class JWTTokenAutenticacaoService {
 	
 	
     // Tempo de expiração do token (11 dias em milissegundos)
-	private static final long EXPIRATION_TIME = 959990000;
+	private static final long EXPIRATION_TIME = 959990000;   
 	
 	// Chave secreta usada para assinar o token JWT
 	private static final String SECRET = "ss/-*-*sds565dsd-s/d-s*dsds";
@@ -46,7 +50,7 @@ public class JWTTokenAutenticacaoService {
 		// Geração do token JWT utilizando o nome de usuário e tempo de expiração
 		String JWT = Jwts.builder()./*Chama o gerador de token*/
 				setSubject(username) // Define o nome de usuário como o sujeito do token
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))  // Define a data de expiração
+				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))  // Define a data de expiração - data hj + 11 dias
 				.signWith(SignatureAlgorithm.HS512, SECRET)  // Assina o token com o algoritmo HS512 e a chave secreta
 				.compact(); // Compacta o token gerado para que ele fique pronto para uso
 		
@@ -68,10 +72,12 @@ public class JWTTokenAutenticacaoService {
 	
 
 	/*verifica se o token JWT recebido na requisição é válido e, se for, retorna uma autenticação válida para o Spring Security. ou caso nao seja valido retona null*/
-	public Authentication getAuthetication(HttpServletRequest request, HttpServletResponse response) {
+	public Authentication getAuthetication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		// Obtém o token do cabeçalho "Authorization" da requisição
 		String token = request.getHeader(HEADER_STRING);
+		
+		try {
 		
 		// Verifica se o token não é nulo0
 		if (token != null) {
@@ -85,6 +91,7 @@ public class JWTTokenAutenticacaoService {
 	                .parseClaimsJws(tokenLimpo) // Faz o parsing do token JWT
 	                .getBody().getSubject(); // Obtém o nome de usuário contido no token
 	        
+
 	        // Verifica se o nome de usuário foi encontrado no token
 	        if (user != null) {
 	            
@@ -106,9 +113,21 @@ public class JWTTokenAutenticacaoService {
 			}
 			
 		}
+			
+		}catch (SignatureException e) {
+			response.getWriter().write("Token está inválido.");
+
+
+		}catch (ExpiredJwtException e) {
+			response.getWriter().write("Token está expirado, efetue o login novamente.");
+		}
+		finally {
+			liberacaoCors(response); // Configura cabeçalhos na resposta HTTP para resolver problemas de CORS, permitindo que o backend aceite requisições de diferentes origens (como de outro domínio, porta ou protocolo).
+		}
 		
-		liberacaoCors(response); //// Configura cabeçalhos na resposta HTTP para resolver problemas de CORS, permitindo que o backend aceite requisições de diferentes origens (como de outro domínio, porta ou protocolo).
-		return null; //// Retorna null se o token não for válido ou o usuário não for encontrado
+		return null; // Retorna null se o token não for válido ou o usuário não for encontrado
+	}
+	
 		
 // Resumidamente, o método getAuthentication pega o token JWT enviado no cabeçalho da requisição HTTP,
 //valida esse token usando a chave secreta, extrai o nome de usuário (subject) e busca no banco de dados o objeto do usuário correspondente.
@@ -116,7 +135,7 @@ public class JWTTokenAutenticacaoService {
 //
 // Finalidade: Esse método é usado para autenticar e identificar o usuário com base no token JWT 
 //recebido, permitindo que o sistema saiba quem está fazendo a requisição e aplique as permissões ou restrições necessárias.
-	}
+	
 	
 	
 	/* Método que adiciona cabeçalhos CORS à resposta HTTP para evitar erros de acesso entre origens diferentes */
